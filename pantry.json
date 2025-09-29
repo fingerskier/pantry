@@ -18,6 +18,21 @@
         "required": ["key", "type"]
       }
     },
+    "widgets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": { "type": "string" }, // e.g., "userCard", "salesLeaderboard"
+          "description": { "type": "string" },
+          "parameters": {
+            "type": "object",
+            "additionalProperties": { "type": "string" } // Named config inputs for the widget
+          }
+        },
+        "required": ["key"]
+      }
+    },
     "pages": {
       "type": "object",
       "patternProperties": {
@@ -36,6 +51,20 @@
                   }
                 },
                 "required": ["featureKey"]
+              }
+            },
+            "widgets": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "widgetKey": { "type": "string" }, // References widgets.key
+                  "parameters": {
+                    "type": "object",
+                    "additionalProperties": { "type": "string" } // Page-specific widget param values
+                  }
+                },
+                "required": ["widgetKey"]
               }
             },
             "subPages": { "$ref": "#/properties/pages" } // Recursive for nested paths
