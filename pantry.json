@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "globalFeatures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": { "type": "string" }, // e.g., "auth", "logging"
+          "type": { "enum": ["visual", "background"] },
+          "description": { "type": "string" },
+          "parameters": {
+            "type": "object",
+            "additionalProperties": { "type": "string" } // Named params, e.g., { "userId": "string" }
+          }
+        },
+        "required": ["key", "type"]
+      }
+    },
+    "pages": {
+      "type": "object",
+      "patternProperties": {
+        "^/[a-zA-Z0-9/]+$": { // URL-like keys, e.g., "/dashboard", "/dashboard/users"
+          "type": "object",
+          "properties": {
+            "features": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "featureKey": { "type": "string" }, // References globalFeatures.key
+                  "parameters": {
+                    "type": "object",
+                    "additionalProperties": { "type": "string" } // Page-specific param values
+                  }
+                },
+                "required": ["featureKey"]
+              }
+            },
+            "subPages": { "$ref": "#/properties/pages" } // Recursive for nested paths
+          }
+        }
+      }
+    }
+  },
+  "required": ["pages"]
+}
