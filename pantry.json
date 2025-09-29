@@ -27,7 +27,7 @@
           "description": { "type": "string" },
           "parameters": {
             "type": "object",
-            "additionalProperties": { "type": "string" } // Named config inputs for the widget
+            "additionalProperties": { "type": "string" }
           }
         },
         "required": ["key"]
