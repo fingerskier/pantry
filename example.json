@@ -1,0 +1,35 @@
+{
+  "globalFeatures": [
+    {
+      "key": "userAuth",
+      "type": "background",
+      "description": "Handles user authentication",
+      "parameters": { "userId": "string", "role": "string" }
+    },
+    {
+      "key": "dataTable",
+      "type": "visual",
+      "description": "Renders data table",
+      "parameters": { "dataId": "string" }
+    }
+  ],
+  "pages": {
+    "/dashboard": {
+      "features": [
+        { "featureKey": "userAuth", "parameters": { "role": "admin" } }
+      ],
+      "subPages": {
+        "/dashboard/users": {
+          "features": [
+            { "featureKey": "dataTable", "parameters": { "dataId": "users" } }
+          ]
+        },
+        "/dashboard/metrics": {
+          "features": [
+            { "featureKey": "dataTable", "parameters": { "dataId": "metrics" } }
+          ]
+        }
+      }
+    }
+  }
+}
