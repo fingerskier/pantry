@@ -1,32 +1,54 @@
 {
-  "globalFeatures": [
-    {
-      "key": "userAuth",
+  "globalFeatures": {
+    "userAuth": {
       "type": "background",
       "description": "Handles user authentication",
       "parameters": { "userId": "string", "role": "string" }
     },
-    {
-      "key": "dataTable",
+    "dataTable": {
       "type": "visual",
       "description": "Renders data table",
       "parameters": { "dataId": "string" }
     }
-  ],
+  },
+  "widgets": {
+    "statsCard": {
+      "description": "Displays a key metric with context",
+      "parameters": { "title": "string", "value": "string", "trend": "string" }
+    }
+  },
   "pages": {
     "/dashboard": {
       "features": [
         { "featureKey": "userAuth", "parameters": { "role": "admin" } }
       ],
+      "widgets": [
+        {
+          "widgetKey": "statsCard",
+          "parameters": { "title": "Active Users", "value": "1,024", "trend": "up" }
+        }
+      ],
       "subPages": {
         "/dashboard/users": {
           "features": [
             { "featureKey": "dataTable", "parameters": { "dataId": "users" } }
+          ],
+          "widgets": [
+            {
+              "widgetKey": "statsCard",
+              "parameters": { "title": "New Signups", "value": "87", "trend": "up" }
+            }
           ]
         },
         "/dashboard/metrics": {
           "features": [
             { "featureKey": "dataTable", "parameters": { "dataId": "metrics" } }
+          ],
+          "widgets": [
+            {
+              "widgetKey": "statsCard",
+              "parameters": { "title": "Churn Rate", "value": "2.3%", "trend": "down" }
+            }
           ]
         }
       }

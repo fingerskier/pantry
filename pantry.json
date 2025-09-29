@@ -3,11 +3,10 @@
   "type": "object",
   "properties": {
     "globalFeatures": {
-      "type": "array",
-      "items": {
+      "type": "object",
+      "additionalProperties": {
         "type": "object",
         "properties": {
-          "key": { "type": "string" },
           "type": { "enum": ["visual", "background"] },
           "description": { "type": "string" },
           "parameters": {
@@ -15,22 +14,20 @@
             "additionalProperties": { "type": "string" }
           }
         },
-        "required": ["key", "type"]
+        "required": ["type"]
       }
     },
     "widgets": {
-      "type": "array",
-      "items": {
+      "type": "object",
+      "additionalProperties": {
         "type": "object",
         "properties": {
-          "key": { "type": "string" },
           "description": { "type": "string" },
           "parameters": {
             "type": "object",
             "additionalProperties": { "type": "string" }
           }
-        },
-        "required": ["key"]
+        }
       }
     },
     "pages": {
