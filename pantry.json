@@ -7,12 +7,12 @@
       "items": {
         "type": "object",
         "properties": {
-          "key": { "type": "string" }, // e.g., "auth", "logging"
+          "key": { "type": "string" },
           "type": { "enum": ["visual", "background"] },
           "description": { "type": "string" },
           "parameters": {
             "type": "object",
-            "additionalProperties": { "type": "string" } // Named params, e.g., { "userId": "string" }
+            "additionalProperties": { "type": "string" }
           }
         },
         "required": ["key", "type"]
@@ -23,7 +23,7 @@
       "items": {
         "type": "object",
         "properties": {
-          "key": { "type": "string" }, // e.g., "userCard", "salesLeaderboard"
+          "key": { "type": "string" },
           "description": { "type": "string" },
           "parameters": {
             "type": "object",
@@ -36,7 +36,7 @@
     "pages": {
       "type": "object",
       "patternProperties": {
-        "^/[a-zA-Z0-9/]+$": { // URL-like keys, e.g., "/dashboard", "/dashboard/users"
+        "^/[a-zA-Z0-9/]+$": {
           "type": "object",
           "properties": {
             "features": {
@@ -44,10 +44,10 @@
               "items": {
                 "type": "object",
                 "properties": {
-                  "featureKey": { "type": "string" }, // References globalFeatures.key
+                  "featureKey": { "type": "string" },
                   "parameters": {
                     "type": "object",
-                    "additionalProperties": { "type": "string" } // Page-specific param values
+                    "additionalProperties": { "type": "string" }
                   }
                 },
                 "required": ["featureKey"]
@@ -58,16 +58,16 @@
               "items": {
                 "type": "object",
                 "properties": {
-                  "widgetKey": { "type": "string" }, // References widgets.key
+                  "widgetKey": { "type": "string" },
                   "parameters": {
                     "type": "object",
-                    "additionalProperties": { "type": "string" } // Page-specific widget param values
+                    "additionalProperties": { "type": "string" }
                   }
                 },
                 "required": ["widgetKey"]
               }
             },
-            "subPages": { "$ref": "#/properties/pages" } // Recursive for nested paths
+            "subPages": { "$ref": "#/properties/pages" }
           }
         }
       }
