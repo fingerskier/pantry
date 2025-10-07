@@ -1,0 +1,168 @@
+{
+  "$id": "https://cio.dev/schema/0.1.0/cio.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Control I/O Spec (CIO) v0.1.0",
+  "type": "object",
+  "required": ["cio_version", "id", "name", "ports", "payloads", "mappings"],
+  "properties": {
+    "cio_version": { "type": "string", "pattern": "^0\\.1\\.0$" },
+    "id": { "type": "string", "minLength": 1 },
+    "name": { "type": "string" },
+    "description": { "type": "string" },
+    "metadata": { "type": "object", "additionalProperties": true },
+
+    "ports": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/port" },
+      "minItems": 1
+    },
+
+    "payloads": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/payload" }
+    },
+
+    "mappings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["port", "payload", "direction"],
+        "properties": {
+          "port": { "type": "string" },
+          "payload": { "type": "string" },
+          "direction": { "enum": ["tx", "rx", "bidir"] }
+        },
+        "additionalProperties": false
+      }
+    },
+
+    "constraints": { "type": "object", "additionalProperties": true }
+  },
+
+  "$defs": {
+    "range": {
+      "type": "object",
+      "properties": {
+        "min": { "type": "number" },
+        "typ": { "type": "number" },
+        "max": { "type": "number" },
+        "unit": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+
+    "port": {
+      "type": "object",
+      "required": ["id", "role", "connector", "protocol"],
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "role": { "enum": ["power_in", "power_out", "signal_in", "signal_out", "bidir"] },
+        "connector": {
+          "type": "object",
+          "required": ["form"],
+          "properties": {
+            "form": {
+              "enum": ["pin_header", "usb_c", "rj45", "screw_terminal", "edge", "radio", "custom"]
+            },
+            "details": { "type": "object", "additionalProperties": true }
+          },
+          "additionalProperties": false
+        },
+        "electrical": {
+          "type": "object",
+          "properties": {
+            "voltage": { "$ref": "#/$defs/range" },
+            "logic_level": { "$ref": "#/$defs/range" },
+            "current_limit": { "$ref": "#/$defs/range" },
+            "drive_strength": { "$ref": "#/$defs/range" },
+            "input_impedance": { "$ref": "#/$defs/range" },
+            "pullups": {
+              "type": "object",
+              "properties": {
+                "present": { "type": "boolean" },
+                "value": { "$ref": "#/$defs/range" }
+              },
+              "additionalProperties": false
+            },
+            "protection": { "type": "object", "additionalProperties": true }
+          },
+          "additionalProperties": false
+        },
+        "timing": {
+          "type": "object",
+          "properties": {
+            "sample_rate": { "$ref": "#/$defs/range" },
+            "bus_speed": { "$ref": "#/$defs/range" },
+            "latency_budget": { "$ref": "#/$defs/range" },
+            "jitter_budget": { "$ref": "#/$defs/range" },
+            "duty_cycle_range": {
+              "type": "object",
+              "properties": { "min": { "type": "number" }, "max": { "type": "number" } },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "protocol": {
+          "type": "object",
+          "required": ["type"],
+          "properties": {
+            "type": {
+              "enum": ["power_dc", "uart", "i2c", "spi", "pwm", "gpio", "can", "ethernet", "usb", "ble_gatt", "custom"]
+            },
+            "params": { "type": "object", "additionalProperties": true },
+            "framing": { "type": "object", "additionalProperties": true }
+          },
+          "additionalProperties": false
+        },
+        "x_ext": { "type": "object", "additionalProperties": true }
+      },
+      "additionalProperties": false
+    },
+
+    "field": {
+      "type": "object",
+      "required": ["name", "type"],
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "enum": ["bool","u8","u16","u32","u64","i8","i16","i32","i64","f32","f64","bytes","string"] },
+        "unit": { "type": "string" },
+        "range": { "$ref": "#/$defs/range" },
+        "scale": { "type": "number" }
+      },
+      "additionalProperties": false
+    },
+
+    "payload": {
+      "type": "object",
+      "required": ["id", "content_type", "schema", "transport"],
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "content_type": { "type": "string" },
+        "schema": {
+          "type": "object",
+          "properties": {
+            "fields": { "type": "array", "items": { "$ref": "#/$defs/field" } }
+          },
+          "additionalProperties": false
+        },
+        "transport": {
+          "type": "object",
+          "required": ["over"],
+          "properties": {
+            "over": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+            "framing": { "type": "object", "additionalProperties": true },
+            "rate_limit": { "$ref": "#/$defs/range" },
+            "i2c": { "type": "object", "additionalProperties": true },
+            "spi":  { "type": "object", "additionalProperties": true },
+            "uart": { "type": "object", "additionalProperties": true }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
